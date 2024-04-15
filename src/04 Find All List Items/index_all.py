@@ -1,12 +1,12 @@
-def index_all(search_list, item):
-    index_list = []
-    for index, value in enumerate(search_list):
-        if value == item:
-            index_list.append([index])
-        elif isinstance(search_list[index], list):
-            for i in index_all(search_list[index], item):
-                index_list.append([index] + i)
-    return index_list
+def index_all(mylist, char):
+   index_list=[]
+   for index, value in enumerate(mylist):
+       if value ==char:
+           index_list.append([index])
+       elif isinstance(mylist[index],list):
+           for i in index_all(mylist[index],char):
+               index_list.append([index]+i)
+   return index_list
 
 
 # commands used in solution video for reference
