@@ -1,6 +1,8 @@
 def sort_words(words):
-    return ' '.join(sorted(words.split(), key=str.casefold))
-
+    words_split=words.split()
+    res=sorted(words_split,key=str.casefold)
+    
+    return ' '.join(res)
 
 # commands used in solution video for reference
 if __name__ == '__main__':
