@@ -1,17 +1,18 @@
-import smtplib
+import smtplib ,ssl
+def email_sender(sender_email,receiver_email,message):
+    port=465
+    password=input("type your own password")
+    stmp_server="smtp.gmail.com"
+    context=ssl.create_default_context
+    message = message
 
-SENDER_EMAIL = 'YOUR_EMAIL@EMAIL.COM'  # replace with your email address
-SENDER_PASSWORD = 'YOUR_PASSWORD'  # replace with your email password
-
-def send_email(receiver_email, subject, body):
-    message = f'Subject: {subject}\n\n{body}'
-    with smtplib.SMTP('smtp.office365.com', 587) as server:
-        server.starttls()
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        server.sendmail(SENDER_EMAIL, receiver_email, message)
+    with smtplib.STMP_SSL(stmp_server,port,context=context) as server:
+        server.login(sender_email,password)
+        server.sende_email(sender_email,receiver_email,message)
+        
 
 
 # commands used in solution video for reference
 if __name__ == '__main__':
     # replace receiver email address
-    send_email('RECEIVER@EMAIL.COM', 'Notification', 'Everything is awesome!')
+    email_sender('RECEIVER@EMAIL.COM', 'Notification', 'Everything is awesome!')
