@@ -4,7 +4,7 @@ def waiting_game():
     target=random.randint(2,4)
     print(f"please wait {target} time and then press enter ")
     input("please presse enter to begin")
-    timer=time.pref_counter()
+    timer=time.perf_counter()
     input(f"please press enter again after{target} seconds")
     elapsed = time.perf_counter() - timer
      
