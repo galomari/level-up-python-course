@@ -1,7 +1,7 @@
 import random
 import time
 def waiting_game():
-    target=random.randit(2,4)
+    target=random.randint(2,4)
     print(f"please wait {target} time and then press enter ")
     input("please presse enter to begin")
     timer=time.pref_counter()
