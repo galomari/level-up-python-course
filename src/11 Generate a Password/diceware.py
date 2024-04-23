@@ -1,15 +1,18 @@
-import secrets
+import random
+from docx import Document
 
-def generate_passphrase(num_words, wordlist_path='diceware.wordlist.asc'):
-    with open(wordlist_path, 'r', encoding='utf-8') as file:
-        lines = file.readlines()[2:7778]
-        word_list = [line.split()[1] for line in lines]
+def generate_prephrase(number_of_words):
+    # Load the DOCX file
+    doc = Document(r"C:\Users\hp\Downloads\f.docx")
+    # Read all text from the first paragraph
+    line = doc.paragraphs[0].text
+    words = line.split()
+    # Filter words that match the specified length
+    words_of_length = [word for word in words if len(word) == number_of_words]
+    # Randomly choose a word from the filtered list
+    if words_of_length:
+        return random.choice(words_of_length)
+    return None
 
-    words = [secrets.choice(word_list) for i in range(num_words)]
-    return ' '.join(words)
-
-
-# commands used in solution video for reference
-if __name__ == '__main__':
-    print(generate_passphrase(7))
-    print(generate_passphrase(7))
+# Example usage
+print(generate_prephrase(9))
