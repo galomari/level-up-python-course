@@ -1,53 +1,76 @@
-from itertools import product
+
+def is_valid(puzzle, num, position):
+    # Check if the number is not already in the given row
+    for i in range(len(puzzle[0])):  # Ensure column index is within the puzzle's width
+        if puzzle[position[0]][i] == num and i != position[1]:  # Corrected condition
+            return False
+
+    # Check if the number is not already in the given column
+    for i in range(len(puzzle)):  # Ensure row index is within the puzzle's height
+        if puzzle[i][position[1]] == num and i != position[0]:  # Corrected condition
+            return False
+
+    # Check the 3x3 box
+    box_x = position[1] // 3
+    box_y = position[0] // 3
+    for i in range(box_y * 3, box_y * 3 + 3):
+        for j in range(box_x * 3, box_x * 3 + 3):
+            if puzzle[i][j] == num and (i, j) != position:  # Ensure i and j are within range
+                return False
+
+    return True
+
 
 def solve_sudoku(puzzle):
-    for (row, col) in product(range(0, 9), repeat=2):
-        if puzzle[row][col] == 0:  # find an unassigned cell
-            for num in range(1, 10):
-                allowed = True  # check if num is allowed in row/col/box
-                for i in range(0, 9):
-                    if num in (puzzle[i][col], puzzle[row][i]):
-                        allowed = False
-                        break  # not allowed in row or col
-                for (i, j) in product(range(0, 3), repeat=2):
-                    if puzzle[row - row % 3 + i][col - col % 3 + j] == num:
-                        allowed = False
-                        break  # not allowed in box
-                if allowed:
-                    puzzle[row][col] = num
-                    if trial := solve_sudoku(puzzle):
-                        return trial
-                    puzzle[row][col] = 0
-            return False  # could not place a number in this cell
-    return puzzle
+    # Find the first empty spot
+    empty = None
+    for i in range(len(puzzle)):
+        for j in range(len(puzzle[0])):
+            if puzzle[i][j] == 0:
+                empty = (i, j)
+                break
+        if empty is not None:
+            break
 
-def print_sudoku(puzzle):
-    # replace zeroes with dashes
-    puzzle = [['*' if num == 0 else num for num in row] for row in puzzle]
-    print()
-    for row in range(0, 9):
-        if ((row % 3 == 0) and (row != 0)):
-            print('-' * 33)  # draw horizontal line
-        for col in range(0, 9):
-            if ((col % 3 == 0) and (col != 0)):
-                print(' | ', end='')  # draw vertical line
-            print(f' {puzzle[row][col]} ', end='')
-        print()
-    print()
+    if not empty:
+        return True  # Puzzle solved
+    else:
+        row, col = empty
 
-test_puzzle = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
-               [6, 0, 0, 1, 9, 5, 0, 0, 0],
-               [0, 9, 8, 0, 0, 0, 0, 6, 0],
-               [8, 0, 0, 0, 6, 0, 0, 0, 3],
-               [4, 0, 0, 8, 0, 3, 0, 0, 1],
-               [7, 0, 0, 0, 2, 0, 0, 0, 6],
-               [0, 6, 0, 0, 0, 0, 2, 8, 0],
-               [0, 0, 0, 4, 1, 9, 0, 0, 5],
-               [0, 0, 0, 0, 8, 0, 0, 7, 9]]
+    for num in range(1, 10):
+        if is_valid(puzzle, num, (row, col)):
+            puzzle[row][col] = num
+
+            if solve_sudoku(puzzle):
+                return True
+
+            puzzle[row][col] = 0  # backtrack
+
+    return False  # trigger backtracking if no number is valid
 
 
-# commands used in solution video for reference
-if __name__ == '__main__':
-    print_sudoku(test_puzzle)
-    solution = solve_sudoku(test_puzzle)
-    print_sudoku(solution)
+def print_puzzle(puzzle):
+    for row in puzzle:
+        print(" ".join(str(num) for num in row))
+
+
+# Example Sudoku grid
+puzzle = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+]
+
+
+if solve_sudoku(puzzle):
+    print("Sudoku solved:")
+    print(len(puzzle))
+    print_puzzle(puzzle)
+else:
+    print("No solution exists")
