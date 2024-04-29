@@ -1,7 +1,8 @@
-import random
 import time
+import secrets
+
 def waiting_game():
-    target=random.randint(2,4)
+    target=secrets.SystemRandom().randint(2,4)
     print(f"please wait {target} time and then press enter ")
     input("please presse enter to begin")
     timer=time.perf_counter()

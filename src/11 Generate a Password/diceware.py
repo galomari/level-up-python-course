@@ -1,5 +1,5 @@
-import random
 from docx import Document
+import secrets
 
 def generate_prephrase(number_of_words):
     # Load the DOCX file
@@ -11,7 +11,7 @@ def generate_prephrase(number_of_words):
     words_of_length = [word for word in words if len(word) == number_of_words]
     # Randomly choose a word from the filtered list
     if words_of_length:
-        return random.choice(words_of_length)
+        return secrets.choice(words_of_length)
     return None
 
 # Example usage
